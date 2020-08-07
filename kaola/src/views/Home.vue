@@ -2,11 +2,27 @@
   <div class="home">
     <!-- 搜索,登录注册模块  begin -->
     <van-row class="search_row">
-      <van-col span="18"><van-search v-model="search_value" placeholder="请输入搜索关键词" /></van-col>
-      <van-col offset='1' span="5" class="right_cont">
-          <router-link to='/register'>注册</router-link>/
-          <router-link to='/login'>登录</router-link>
-      </van-col>
+        <van-col span="18"><van-search @click="clickPopup" placeholder="请输入搜索关键词" class="search"/></van-col>
+        <!-- 弹出搜索框  begin -->
+        <van-popup v-model="showPopup" position="bottom" :style="{ height: '100%' }">
+            <van-row class="pop_cont">
+                <van-col span="2"><van-icon name="arrow-left" /></van-col>
+                <van-search
+                    v-model="value"
+                    show-action
+                    placeholder="请输入搜索关键词"
+                    @search="onSearch">
+                    <template #action>
+                        <div @click="onSearch">搜索</div>
+                    </template>
+                </van-search>
+            </van-row>
+        </van-popup>
+        <!-- 弹出搜索框  end -->
+        <van-col offset='1' span="5" class="right_cont">
+            <router-link to='/register'>注册</router-link>/
+            <router-link to='/login'>登录</router-link>
+        </van-col>
     </van-row>
     
     <!-- 搜索,登录注册模块  end -->
@@ -36,13 +52,13 @@
       <van-col span="12">
         <h1>硬核补贴<span>大牌低价补贴</span></h1>
         <ul>
-          <li v-for='(item,i) in brand'><router-link :to='item.link'><van-image :src="item.src" alt="item" /></router-link></li>
+          <li v-for='(item,i) in brand' :key='i'><router-link :to='item.link'><van-image :src="item.src" alt="item" /></router-link></li>
         </ul>
       </van-col>
       <van-col span="12">
         <h1>排行榜<span>跟着买就对了</span></h1>
         <ul>
-          <li v-for='(item,i) in redlist'><router-link :to='item.link'><van-image :src="item.src" alt="item" /></router-link></li>
+          <li v-for='(item,i) in redlist' :key='i'><router-link :to='item.link'><van-image :src="item.src" alt="item" /></router-link></li>
         </ul>
       </van-col>
     </van-row>
@@ -68,7 +84,7 @@
       display: flex;
       justify-content: space-between;
       padding: 10px;
-      .van-search{
+      .search{
         border:2px solid #f00;
         border-radius:30px;
         height: 30px;
@@ -79,6 +95,11 @@
           background: none;
         }
       }
+    //   搜索弹出层样式
+    .pop_cont {
+        line-height: 56px;
+        text-align: center;
+    }
       .right_cont{
         display: flex;
         justify-content: space-around;
@@ -208,131 +229,127 @@
   }
 </style>
 <script>
-  import Vue from 'vue';
-import { Search } from 'vant';
-Vue.use(Search);
-import { Lazyload } from 'vant';
-Vue.use(Lazyload);
-import { Swipe, SwipeItem } from 'vant';
-Vue.use(Swipe);
-Vue.use(SwipeItem);
-import { Col, Row } from 'vant';
-import { Image as VanImage } from 'vant';
-Vue.use(VanImage);
-Vue.use(Col);
-Vue.use(Row);
-export default {
-  name: 'Home',
-  data() {
-    return {
-      search_value:'',
-      images: [
-      require('../assets/banner1.png'),
-      require('../assets/banner2.png'),
-      require('../assets/banner3.png'),
-      ],
-      pro_list:[
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/dd.png')
+    import Vue from 'vue';
+    import { Search,Lazyload,Swipe, SwipeItem,Col, Row,Image as VanImage,Popup,NavBar,Icon} from 'vant';
+    Vue.use(Search,).use(Lazyload).use(Swipe).use(SwipeItem).use(VanImage).use(Col).use(Row).use(Popup).use(NavBar).use(Icon);
+    export default {
+    name: 'Home',
+    data() {
+        return {
+            searValue:'',
+            showPopup:false,
+            images: [
+                require('../assets/banner1.png'),
+                require('../assets/banner2.png'),
+                require('../assets/banner3.png'),
+            ],
+            pro_list:[
+                {
+                    link:'#',
+                    src:require('../assets/dd.png')
+                },
+                {
+                    link:'#',
+                    src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                }
+            ],
+            brand:[
+                {
+                link:'#',
+                src:require('../assets/dd.png')
+                },
+                {
+                link:'#',
+                src:require('../assets/0.png')
+                }
+            ],
+            redlist:[
+                {
+                link:'#',
+                src:require('../assets/redlist1.jpg')
+                },
+                {
+                link:'#',
+                src:require('../assets/redlist2.jpg')
+                }
+            ],
+            contentlist:[
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                },
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                },
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                },
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                },
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                },
+                {
+                link:'#',
+                img:require('../assets/contentlist1.png'),
+                title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
+                price:'119'
+                }
+            ],
         }
-      ],
-      brand:[
-        {
-          link:'#',
-          src:require('../assets/dd.png')
-        },
-        {
-          link:'#',
-          src:require('../assets/0.png')
+    },
+    methods: {
+        clickPopup(){
+            this.showPopup = true;
         }
-      ],
-      redlist:[
-        {
-          link:'#',
-          src:require('../assets/redlist1.jpg')
-        },
-        {
-          link:'#',
-          src:require('../assets/redlist2.jpg')
-        }
-      ],
-      contentlist:[
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        },
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        },
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        },
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        },
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        },
-        {
-          link:'#',
-          img:require('../assets/contentlist1.png'),
-          title:'Champion冠军t恤男高端life线草写LOGO印花刺绣小标短袖男女潮美版',
-          price:'119'
-        }
-      ],
-    }
-  },
+    },
  
 }
 </script> 
